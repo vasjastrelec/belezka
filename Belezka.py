@@ -121,9 +121,6 @@ class Beleznica:
         self.root.bind("<Control-a>", lambda event: self.select_all())
         self.root.bind("<Control-z>", lambda event: self.undo())
         self.root.bind("<Control-y>", lambda event: self.redo())
-        self.root.bind("<Control-x>", lambda event: self.text_area.event_generate("<<Cut>>"))
-        self.root.bind("<Control-c>", lambda event: self.text_area.event_generate("<<Copy>>"))
-        self.root.bind("<Control-v>", lambda event: self.text_area.event_generate("<<Paste>>"))
 
     def on_textscroll(self, *args):
         self.scrollbar_y.set(*args)
@@ -391,9 +388,12 @@ class Beleznica:
 
 if __name__ == "__main__":
     root = tk.Tk()
+    root.withdraw()
+    root.iconbitmap("my.ico")
     app = Beleznica(root)
 
     if len(sys.argv) > 1:
         app.odpri_datoteko_iz_argumenta(sys.argv[1])
 
+    root.deiconify()
     root.mainloop()
