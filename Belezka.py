@@ -158,12 +158,6 @@ class Beleznica:
             return
 
         zadnja_vrstica = int(self.text_area.index("end-1c").split(".")[0])
-
-        potrebna_sirina = max(4, len(str(zadnja_vrstica)) + 1)
-        trenutna_sirina = int(self.stevilke_vrstic.cget("width"))
-        if trenutna_sirina != potrebna_sirina:
-            self.stevilke_vrstic.config(width=potrebna_sirina)
-
         vsebina = "\n".join(str(i) for i in range(1, zadnja_vrstica + 1))
 
         self.stevilke_vrstic.config(state="normal")
@@ -171,8 +165,7 @@ class Beleznica:
         self.stevilke_vrstic.insert("1.0", vsebina)
         self.stevilke_vrstic.config(state="disabled")
 
-        prvi_vidni = self.text_area.yview()[0]
-        self.stevilke_vrstic.yview_moveto(prvi_vidni)
+        self.stevilke_vrstic.yview_moveto(self.text_area.yview()[0])
 
     def on_cursor_move(self, event=None):
         self.posodobi_status()
@@ -198,12 +191,7 @@ class Beleznica:
 
         rezultat = {"kodiranje": None}
 
-        tk.Label(
-            okno,
-            text="Izberi kodiranje za shranjevanje:",
-            padx=20,
-            pady=15
-        ).pack()
+        tk.Label(okno, text="Izberi kodiranje za shranjevanje:", padx=20, pady=15).pack()
 
         gumbi = tk.Frame(okno)
         gumbi.pack(pady=(0, 15))
@@ -218,11 +206,6 @@ class Beleznica:
 
         tk.Button(gumbi, text="UTF-8", width=12, command=izberi_utf8).pack(side="left", padx=8)
         tk.Button(gumbi, text="ANSI", width=12, command=izberi_ansi).pack(side="left", padx=8)
-
-        okno.update_idletasks()
-        x = self.root.winfo_rootx() + (self.root.winfo_width() // 2) - (okno.winfo_width() // 2)
-        y = self.root.winfo_rooty() + (self.root.winfo_height() // 2) - (okno.winfo_height() // 2)
-        okno.geometry(f"+{x}+{y}")
 
         self.root.wait_window(okno)
         return rezultat["kodiranje"]
@@ -388,12 +371,9 @@ class Beleznica:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.withdraw()
-    root.iconbitmap("my.ico")
     app = Beleznica(root)
 
     if len(sys.argv) > 1:
         app.odpri_datoteko_iz_argumenta(sys.argv[1])
 
-    root.deiconify()
     root.mainloop()
